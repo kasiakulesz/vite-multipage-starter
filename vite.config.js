@@ -1,17 +1,14 @@
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
-import { glob } from 'glob'
+import { globSync } from 'glob';
 import tailwindcss from '@tailwindcss/vite'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-const inputs = [];
-
-for await (const entry of glob('src/**/*.html')) {
-  console.log(resolve(__dirname, entry));
-  inputs.push(resolve(__dirname, entry));
-}
+const inputs = globSync('src/**/*.html', { nodir: true }).map(entry =>
+  resolve(__dirname, entry)
+)
 
 export default defineConfig({
   plugins: [

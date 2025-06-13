@@ -109,7 +109,7 @@ function setupAddArticleButton () {
             <input type="datetime-local" id="date" name="created_at" class="mt-2 bg-white col-span-1 p-1 rounded focus:outline-pink-800" required />
           <label for="content" class="mt-2">Treść: </label>
             <textarea id="content" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required></textarea>
-          <button type="submit" id="submit" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4">Dodaj na stronę</button>
+          <button type="submit" id="submit" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4 transition duration-500 ease-in-out">Dodaj na stronę</button>
         </form>
       </section>
       `;

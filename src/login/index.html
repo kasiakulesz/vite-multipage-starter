@@ -3,13 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <title>TW Zaliczenie | Logowanie</title>
     <link rel="stylesheet" href="/style.css">
   </head>
   <body>
-    <div id="app">
-      <a href="/">Home</a>
-    </div>
+    <main id="app" class="p-4 md:px-8 container mx-auto">
+      <nav>
+        <a href="/" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4 transition duration-500 ease-in-out">Strona główna</a>
+      </nav>
+      <section class="m-auto w-fit p-10 bg-pink-100 text-pink-800 align-text-bottom rounded mb-50">
+        <h1 class="text-2xl font-bold col-span-4">Zaloguj się</h1>
+        <form class="flex flex-col gap-4 mt-8">
+          <label for="username" class="flex flex-col">Adres e-mail</label>
+            <input type="text" id="username" name="username" required class="bg-white rounded p-1 focus:outline-pink-800">
+          <label for="password" class="flex flex-col">Hasło</label>
+            <input type="password" id="password" name="password" required class="bg-white rounded p-1 focus:outline-pink-800"/>
+          <button type="submit" class="cursor-pointer bg-pink-300 hover:bg-blue-300 transition duration-500 ease-in-out p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold">Zaloguj się</button>
+        </form>
+      </section>
+    </main>
     <script type="module" src="/login/main.js"></script>
   </body>
 </html>

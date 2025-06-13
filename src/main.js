@@ -1,3 +1,5 @@
+import { supabase } from "./api.client.js";
+
 main();
 
 ///

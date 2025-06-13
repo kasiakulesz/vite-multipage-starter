@@ -107,10 +107,8 @@ function setupAddArticleButton () {
             <input type="text" id="title" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
           <label for="subtitle" class="mt-2 col-span-4">Podtytuł: </label>
             <input type="text" id="subtitle" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
-          <label for="title" class="mt-2 col-span-1">Autor: </label>
-            <input type="text" id="author" class="bg-white col-span-1 mt-2 rounded p-1 focus:outline-pink-800" required/>
-          <label for="date" class="mt-2 col-span-1">Data: </label>
-            <input type="datetime-local" id="date" name="created_at" class="mt-2 bg-white col-span-1 p-1 rounded focus:outline-pink-800" required />
+          <label for="title" class="mt-2 col-span-4">Autor: </label>
+            <input type="text" id="author" class="bg-white col-span-4 mt-2 rounded p-1 focus:outline-pink-800" required/>
           <label for="content" class="mt-2">Treść: </label>
             <textarea id="content" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required></textarea>
           <button type="submit" id="submit" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4 hover:bg-blue-300 transition duration-500 ease-in-out">Dodaj na stronę</button>
@@ -222,6 +220,8 @@ function setupEditButton() {
             <input type="text" id="subtitle" value="${article.subtitle}" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
           <label for="title" class="mt-2 col-span-1">Autor: </label>
             <input type="text" id="author" value="${article.author}" class="bg-white col-span-1 mt-2 rounded p-1 focus:outline-pink-800" required/>
+          <label for="date" class="mt-2 col-span-1">Data: </label>
+            <input type="datetime-local" id="date" name="created_at" class="mt-2 bg-white col-span-1 p-1 rounded focus:outline-pink-800" required />
           <label for="content" class="mt-2">Treść: </label>
             <textarea id="content" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required>${article.content}</textarea>
           <button type="submit" id="save_changes" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4 hover:bg-blue-300 transition duration-500 ease-in-out">Zapisz zmiany</button>
@@ -245,6 +245,7 @@ function setupEditButton() {
         const newArticleData = {
             title: form.title.value,
             subtitle: form.subtitle.value,
+            created_at: form.date.value ? new Date(form.date.value).toISOString() : new Date().toISOString(),
             author: form.author.value,
             content: form.content.value
           };

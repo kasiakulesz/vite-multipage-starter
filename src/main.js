@@ -8,6 +8,7 @@ async function main() {
   
   setupLoginButton();
   setupLogoutButton();
+  setupAddArticleButton();
   
   await fetchArticles();
 }
@@ -60,4 +61,56 @@ function setupLogoutButton() {
   logoutButton.className = 'text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300 cursor-pointer';
 
   navbar.appendChild(logoutButton);
+}
+
+function setupAddArticleButton () {
+  const navbar = document.querySelector('nav');
+
+  const addArticleButton = document.createElement('button');
+  addArticleButton.textContent = 'Dodaj artykuł';
+  addArticleButton.className = 'text-l hover:bg-pink-400 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out bg-blue-300 cursor-pointer';
+  addArticleButton.type = "button";
+
+  addArticleButton.addEventListener('click', () => {
+    const dialog = document.createElement('dialog');
+    dialog.className = 'bg-pink-100';
+    dialog.innerHTML = `
+      <section class="m-auto w-fit bg-pink-100 text-pink-800 align-text-bottom rounded mb-50">
+        <form id="add-article-form" class="p-5 inline-grid gap-2 align-baseline">
+          <h2 class="text-2xl font-bold col-span-4">Dodaj nowy artykuł</h2>
+          <label for="title" class="mt-2 col-span-4">Tytuł: </label>
+            <input type="text" id="title" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
+          <label for="subtitle" class="mt-2 col-span-4">Podtytuł: </label>
+            <input type="text" id="subtitle" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
+          <label for="title" class="mt-2 col-span-1">Autor: </label>
+            <input type="text" id="author" class="bg-white col-span-1 mt-2 rounded p-1 focus:outline-pink-800" required/>
+          <label for="date" class="mt-2 col-span-1">Data: </label>
+            <input type="datetime-local" id="date" name="created_at" class="mt-2 bg-white col-span-1 p-1 rounded focus:outline-pink-800" required />
+          <label for="content" class="mt-2">Treść: </label>
+            <textarea id="content" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required></textarea>
+          <button type="submit" id="submit" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4">Dodaj na stronę</button>
+        </form>
+      </section>
+      `;
+    
+    document.body.appendChild(dialog);
+    dialog.showModal()
+
+    const form = dialog.querySelector('#add-article-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = e.target.title.value;
+      const content = e.target.content.value;
+
+      const { error } = await supabase.from('articles').insert({ title, content });
+
+      if (error) {
+        console.error('Error adding article:', error);
+        alert('Błąd podczas dodawania artykułów. Sprawdź konsolę.');
+        return;
+      }
+    });
+  });
+
+  navbar.appendChild(addArticleButton);
 }

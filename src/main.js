@@ -34,7 +34,6 @@ async function fetchArticles() {
     return
   }
 
-  console.log('Fetched articles:', data);
   const articleList = data.map((article, i) => {
     return `
       ${i > 0 ? '<hr class="w-50 h-px mx-auto my-8 bg-gray-300 border-0"/>' : ''}
@@ -54,8 +53,8 @@ async function fetchArticles() {
 
     document.querySelectorAll('.changer').forEach(btn => btn.remove());
 
-    const { data: session } = await supabase.auth.getSession();
-    if (session) {
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (sessionData.session) {
       setupDeleteButton();
       setupEditButton();
     }
@@ -175,7 +174,7 @@ function setupDeleteButton() {
         .eq('id', articleID)
 
       if (error) {
-        console.error('Wystąpił błąd podczas usuwania: ', erorr);
+        console.error('Wystąpił błąd podczas usuwania: ', error);
         alert('Usunięcie nie powiodło się.')
         return;
       }

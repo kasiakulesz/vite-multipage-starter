@@ -7,6 +7,7 @@ main();
 async function main() {
   
   setupLoginButton();
+  setupLogoutButton();
   
   await fetchArticles();
 }
@@ -45,7 +46,18 @@ function setupLoginButton() {
   const loginButton = document.createElement('a');
   loginButton.textContent = 'Login';
   loginButton.href = "/login/";
-  loginButton.className = 'text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300';
+  loginButton.className = 'text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300 cursor-pointer';
 
   navbar.appendChild(loginButton);
+}
+
+function setupLogoutButton() {
+  const navbar = document.querySelector('nav');
+
+  const logoutButton = document.createElement('a');
+  logoutButton.textContent = 'Logout';
+  logoutButton.type = "button";
+  logoutButton.className = 'text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300 cursor-pointer';
+
+  navbar.appendChild(logoutButton);
 }

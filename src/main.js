@@ -188,10 +188,85 @@ function setupDeleteButton() {
 
 function setupEditButton() {
   document.querySelectorAll(".article").forEach(single_article => {
+    const articleID = single_article.dataset.articleId;
+
     const editButton = document.createElement('button');
     editButton.textContent = "Edytuj";
     editButton.type = "button";
     editButton.className = "cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out";
+
+    editButton.addEventListener('click', async () => {
+      const { data: articlem, error } = await supabase
+        .from('articles')
+        .select('*')
+        .eq('id', articleID)
+        .single();
+
+      if (error) {
+        console.error('Wystąpił błąd podczas edycji: ', erorr);
+        alert('Edycja nie powiodła się.')
+        return;
+      }
+
+      const dialog = document.createElement('dialog');
+      dialog.className = "bg-pink-100";
+      dialog.innerHTML = `
+        <section class="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center text-pink-800 align-text-bottom rounded">
+        <form id="edit-article-form" class="bg-pink-100 p-5 inline-grid gap-2 align-baseline">
+          <h2 class="text-2xl font-bold col-span-4">Edytuj artykuł</h2>
+          <label for="title" class="mt-2 col-span-4">Tytuł: </label>
+            <input type="text" id="title" value="${article.title}" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
+          <label for="subtitle" class="mt-2 col-span-4">Podtytuł: </label>
+            <input type="text" id="subtitle" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
+          <label for="title" class="mt-2 col-span-1">Autor: </label>
+            <input type="text" id="author" class="bg-white col-span-1 mt-2 rounded p-1 focus:outline-pink-800" required/>
+          <label for="date" class="mt-2 col-span-1">Data: </label>
+            <input type="datetime-local" id="date" name="created_at" class="mt-2 bg-white col-span-1 p-1 rounded focus:outline-pink-800" required />
+          <label for="content" class="mt-2">Treść: </label>
+            <textarea id="content" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required></textarea>
+          <button type="submit" id="save_changes" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4 hover:bg-blue-300 transition duration-500 ease-in-out">Zapisz zmiany</button>
+          <button type="button" id="cancel" aria-label="close" class="cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out" formnovalidate>Anuluj</button>
+        </form>
+      </section>
+      `;
+
+      document.body.appendChild(dialog);
+      dialog.showModal();
+
+      dialog.querySelector('#cancel').addEventListener('click', (e) => {
+        e.preventDefault();
+        dialog.close();
+        dialog.remove();
+      });
+
+      dialog.querySelector('#save_changes').addEventListener('click', (e) => {
+        e.preventDefault();
+        const form = dialog.querySelector('#edit-article-form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+          const newArticleData = {
+            title: form.title.value,
+            subtitle: form.subtitle.value,
+            author: form.author.value,
+            content: form.content.value
+          };
+
+        const { error } = await supabase.from('articles').update(newArticleData).eq('id', articleID);
+
+        if (error) {
+          console.error('Error adding article:', error);
+          alert('Błąd podczas dodawania artykułów. Sprawdź konsolę.');
+          return;
+        }
+
+        dialog.close();
+        dialog.remove();
+        await fetchArticles();
+      });
+        });
+
+    await fetchArticles();
+    });
 
     single_article.appendChild(editButton);
   });

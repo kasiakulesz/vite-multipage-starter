@@ -5,11 +5,20 @@ main();
 ///
 
 async function main() {
-  
-  setupLoginButton();
-  setupLogoutButton();
-  setupAddArticleButton();
-  
+  const { data, error } = await supabase.auth.getSession();
+  if (data.session) {
+    setupLogoutButton();
+    setupAddArticleButton();
+  } else {
+    setupLoginButton();
+  }
+
+  if (error) {
+    console.error('Error getting session:', error);
+    alert('Błąd podczas pobierania sesji. Sprawdź konsolę');
+    return;
+  }
+
   await fetchArticles();
 }
 
@@ -59,6 +68,18 @@ function setupLogoutButton() {
   logoutButton.textContent = 'Logout';
   logoutButton.type = "button";
   logoutButton.className = 'text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300 cursor-pointer';
+
+  logoutButton.addEventListener('click', async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error signing out:', error);
+      alert('Błąd podczas wylogowywania. Sprawdź konsolę');
+      return;
+    }
+    logoutButton.remove();
+    setupLoginButton();
+    await fetchArticles();
+  });
 
   navbar.appendChild(logoutButton);
 }

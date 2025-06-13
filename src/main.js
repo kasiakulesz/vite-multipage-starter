@@ -3,23 +3,26 @@ import { supabase } from "./api.client.js";
 main();
 
 ///
+let addArticleButton = null;
+const navbar = document.querySelector('nav');
 
 async function main() {
   const { data, error } = await supabase.auth.getSession();
+  noButtons();
   if (data.session) {
     setupLogoutButton();
     setupAddArticleButton();
   } else {
     setupLoginButton();
   }
+  
+  await fetchArticles();
 
   if (error) {
     console.error('Error getting session:', error);
     alert('Błąd podczas pobierania sesji. Sprawdź konsolę');
     return;
   }
-
-  await fetchArticles();
 }
 
 async function fetchArticles() {
@@ -49,6 +52,8 @@ async function fetchArticles() {
 
     document.getElementById("articles").innerHTML = articleList;
 
+    document.querySelectorAll('.changer').forEach(btn => btn.remove());
+
     const { data: session } = await supabase.auth.getSession();
     if (session) {
       setupDeleteButton();
@@ -57,8 +62,6 @@ async function fetchArticles() {
 }
 
 function setupLoginButton() {
-  const navbar = document.querySelector('nav');
-
   const loginButton = document.createElement('a');
   loginButton.textContent = 'Login';
   loginButton.href = "/login/";
@@ -68,8 +71,6 @@ function setupLoginButton() {
 }
 
 function setupLogoutButton() {
-  const navbar = document.querySelector('nav');
-
   const logoutButton = document.createElement('a');
   logoutButton.textContent = 'Wyloguj się';
   logoutButton.type = "button";
@@ -82,18 +83,16 @@ function setupLogoutButton() {
       alert('Błąd podczas wylogowywania. Sprawdź konsolę');
       return;
     }
-    logoutButton.remove();
-    setupLoginButton();
-    await fetchArticles();
+    main();
   });
 
   navbar.appendChild(logoutButton);
 }
 
 function setupAddArticleButton () {
-  const navbar = document.querySelector('nav');
+  if (addArticleButton) return;
 
-  const addArticleButton = document.createElement('button');
+  addArticleButton = document.createElement('button');
   addArticleButton.textContent = 'Dodaj artykuł';
   addArticleButton.className = 'text-l hover:bg-pink-400 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out bg-blue-300 cursor-pointer';
   addArticleButton.type = "button";
@@ -162,10 +161,12 @@ function setupDeleteButton() {
   document.querySelectorAll(".article").forEach(single_article => {
     const articleID = single_article.dataset.articleId;
 
+    if (single_article.querySelector('button.changer.delete')) return;
+
     const deleteButton = document.createElement('button');
     deleteButton.textContent = "Usuń";
     deleteButton.type = "button";
-    deleteButton.className = "cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out mr-1";
+    deleteButton.className = "changer cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out mr-1";
 
     deleteButton.addEventListener('click', async () => {
       const { error } = await supabase
@@ -190,20 +191,22 @@ function setupEditButton() {
   document.querySelectorAll(".article").forEach(single_article => {
     const articleID = single_article.dataset.articleId;
 
+    if (single_article.querySelector('button.changer.edit')) return;
+
     const editButton = document.createElement('button');
     editButton.textContent = "Edytuj";
     editButton.type = "button";
-    editButton.className = "cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out";
+    editButton.className = "changer cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out";
 
     editButton.addEventListener('click', async () => {
-      const { data: articlem, error } = await supabase
+      const { data: article, error } = await supabase
         .from('articles')
         .select('*')
         .eq('id', articleID)
         .single();
 
       if (error) {
-        console.error('Wystąpił błąd podczas edycji: ', erorr);
+        console.error('Wystąpił błąd podczas edycji: ', error);
         alert('Edycja nie powiodła się.')
         return;
       }
@@ -217,13 +220,11 @@ function setupEditButton() {
           <label for="title" class="mt-2 col-span-4">Tytuł: </label>
             <input type="text" id="title" value="${article.title}" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
           <label for="subtitle" class="mt-2 col-span-4">Podtytuł: </label>
-            <input type="text" id="subtitle" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
+            <input type="text" id="subtitle" value="${article.subtitle}" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
           <label for="title" class="mt-2 col-span-1">Autor: </label>
-            <input type="text" id="author" class="bg-white col-span-1 mt-2 rounded p-1 focus:outline-pink-800" required/>
-          <label for="date" class="mt-2 col-span-1">Data: </label>
-            <input type="datetime-local" id="date" name="created_at" class="mt-2 bg-white col-span-1 p-1 rounded focus:outline-pink-800" required />
+            <input type="text" id="author" value="${article.author}" class="bg-white col-span-1 mt-2 rounded p-1 focus:outline-pink-800" required/>
           <label for="content" class="mt-2">Treść: </label>
-            <textarea id="content" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required></textarea>
+            <textarea id="content" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required>${article.content}</textarea>
           <button type="submit" id="save_changes" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4 hover:bg-blue-300 transition duration-500 ease-in-out">Zapisz zmiany</button>
           <button type="button" id="cancel" aria-label="close" class="cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out" formnovalidate>Anuluj</button>
         </form>
@@ -233,18 +234,16 @@ function setupEditButton() {
       document.body.appendChild(dialog);
       dialog.showModal();
 
-      dialog.querySelector('#cancel').addEventListener('click', (e) => {
-        e.preventDefault();
+      dialog.querySelector('#cancel').addEventListener('click', () => {
         dialog.close();
         dialog.remove();
       });
 
-      dialog.querySelector('#save_changes').addEventListener('click', (e) => {
+      dialog.querySelector('#edit-article-form').addEventListener('submit', async (e) => {
         e.preventDefault();
+
         const form = dialog.querySelector('#edit-article-form');
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-          const newArticleData = {
+        const newArticleData = {
             title: form.title.value,
             subtitle: form.subtitle.value,
             author: form.author.value,
@@ -264,10 +263,14 @@ function setupEditButton() {
         await fetchArticles();
       });
         });
-
-    await fetchArticles();
+      single_article.appendChild(editButton);
     });
+  };
 
-    single_article.appendChild(editButton);
-  });
-}
+  function noButtons() {
+    navbar.innerHTML = "";
+
+    document.querySelectorAll('.changer').forEach(btn => {
+      btn.remove();
+    });
+  }

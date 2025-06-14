@@ -11,6 +11,7 @@ const inputs = globSync('src/**/*.html', { nodir: true }).map(entry =>
 )
 
 export default defineConfig({
+  base: '/vite-multipage-starter/',
   plugins: [
     tailwindcss(),
   ],

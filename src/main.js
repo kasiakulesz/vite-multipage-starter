@@ -77,6 +77,7 @@ function setupLogoutButton() {
 
   logoutButton.addEventListener('click', async () => {
     const { error } = await supabase.auth.signOut();
+
     if (error) {
       console.error('Error signing out:', error);
       alert('Błąd podczas wylogowywania. Sprawdź konsolę');

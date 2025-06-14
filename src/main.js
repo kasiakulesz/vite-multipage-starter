@@ -77,6 +77,7 @@ function setupLogoutButton() {
 
   logoutButton.addEventListener('click', async () => {
     const { error } = await supabase.auth.signOut();
+    localStorage.clear();
 
     if (error) {
       console.error('Error signing out:', error);

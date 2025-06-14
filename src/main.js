@@ -63,7 +63,7 @@ async function fetchArticles() {
 function setupLoginButton() {
   const loginButton = document.createElement('a');
   loginButton.textContent = 'Zaloguj się';
-  loginButton.href = "login/index.html";
+  loginButton.href = "/login/index.html";
   loginButton.className = 'text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300 cursor-pointer';
 
   navbar.appendChild(loginButton);

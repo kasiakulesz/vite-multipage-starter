@@ -36,10 +36,10 @@ async function fetchArticles() {
 
   const articleList = data.map((article, i) => {
     return `
-      ${i > 0 ? '<hr class="w-50 h-px mx-auto my-8 bg-gray-300 border-0"/>' : ''}
-      <article class="article" data-article-id="${article.id}">
-        <h2 class="font-bold text-xl">${article.title}</h2>
-        <h3 class="text-l font-semibold">${article.subtitle}</h4>
+      ${i > 0 ? '<hr class="h-px mx-auto my-8 bg-pink-100 border-0"/>' : ''}
+      <article class="article bg-pink-50 rounded p-5" data-article-id="${article.id}">
+        <h2 class="font-bold text-xl text-pink-600">${article.title}</h2>
+        <h3 class="text-l font-semibold text-pink-900">${article.subtitle}</h4>
         <div class="flex gap-2 text-sm">
           <address rel="author">${article.author}</address>
           <time datetime="${article.created_at}">${new Date(article.created_at).toLocaleDateString()}</time>
@@ -62,7 +62,7 @@ async function fetchArticles() {
 
 function setupLoginButton() {
   const loginButton = document.createElement('a');
-  loginButton.textContent = 'Login';
+  loginButton.textContent = 'Zaloguj się';
   loginButton.href = "/login/";
   loginButton.className = 'text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300 cursor-pointer';
 
@@ -134,7 +134,7 @@ function setupAddArticleButton () {
           title: form.title.value,
           subtitle: form.subtitle.value,
           author: form.author.value,
-          created_at: form.created_at.value ? new Date(form.created_at.value).toISOString() : new Date().toISOString(),
+          created_at: new Date().toISOString(),
           content: form.content.value
         };
 
@@ -218,10 +218,8 @@ function setupEditButton() {
             <input type="text" id="title" value="${article.title}" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
           <label for="subtitle" class="mt-2 col-span-4">Podtytuł: </label>
             <input type="text" id="subtitle" value="${article.subtitle}" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
-          <label for="title" class="mt-2 col-span-1">Autor: </label>
-            <input type="text" id="author" value="${article.author}" class="bg-white col-span-1 mt-2 rounded p-1 focus:outline-pink-800" required/>
-          <label for="date" class="mt-2 col-span-1">Data: </label>
-            <input type="datetime-local" id="date" name="created_at" class="mt-2 bg-white col-span-1 p-1 rounded focus:outline-pink-800" required />
+          <label for="title" class="mt-2 col-span-4">Autor: </label>
+            <input type="text" id="author" value="${article.author}" class="bg-white col-span-4 mt-2 rounded p-1 focus:outline-pink-800" required/>
           <label for="content" class="mt-2">Treść: </label>
             <textarea id="content" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required>${article.content}</textarea>
           <button type="submit" id="save_changes" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4 hover:bg-blue-300 transition duration-500 ease-in-out">Zapisz zmiany</button>
@@ -245,7 +243,7 @@ function setupEditButton() {
         const newArticleData = {
             title: form.title.value,
             subtitle: form.subtitle.value,
-            created_at: form.date.value ? new Date(form.date.value).toISOString() : new Date().toISOString(),
+            created_at: new Date().toISOString(),
             author: form.author.value,
             content: form.content.value
           };

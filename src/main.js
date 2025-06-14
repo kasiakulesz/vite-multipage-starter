@@ -36,15 +36,15 @@ async function fetchArticles() {
 
   const articleList = data.map((article, i) => {
     return `
-      ${i > 0 ? '<hr class="h-px mx-auto my-8 bg-pink-100 border-0"/>' : ''}
-      <article class="article bg-pink-50 rounded p-5" data-article-id="${article.id}">
-        <h2 class="font-bold text-xl text-pink-600">${article.title}</h2>
-        <h3 class="text-l font-semibold text-pink-900">${article.subtitle}</h4>
-        <div class="flex gap-2 text-sm">
-          <address rel="author">${article.author}</address>
+      ${i > 0 ? '<hr class="h-px mx-auto bg-pink-100 border-0"/>' : ''}
+      <article class="article bg-pink-50 rounded-lg p-5" data-article-id="${article.id}">
+        <h2 class="font-bold text-base sm:text-xl md:text-2xl lg:text-3xl text-pink-600 mb-1">${article.title}</h2>
+        <h3 class="text-sm sm:text-s md:text-base lg:text-xl font-semibold text-pink-900 mb-2">${article.subtitle}</h3>
+        <div class="flex flex-wrap gap-2 text-xs sm:text-xs md:text-sm lg:text-m mb-4">
+          <address rel="author" class="not-italic">${article.author}</address>
           <time datetime="${article.created_at}">${new Date(article.created_at).toLocaleDateString()}</time>
         </div>
-        <p class="mt-2">${article.content}</p>
+        <p class="leading-relaxed text-sm sm:text-s md:text-m lg:text-base">${article.content}</p>
       </article>
     `;
 }).join('');
@@ -64,7 +64,7 @@ function setupLoginButton() {
   const loginButton = document.createElement('a');
   loginButton.textContent = 'Zaloguj się';
   loginButton.href = "/vite-multipage-starter/login/index.html";
-  loginButton.className = 'text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300 cursor-pointer';
+  loginButton.className = 'sm:w-auto text-xs text-sm sm:text-s md:text-base lg:text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300 cursor-pointer';
 
   navbar.appendChild(loginButton);
 }
@@ -73,7 +73,7 @@ function setupLogoutButton() {
   const logoutButton = document.createElement('a');
   logoutButton.textContent = 'Wyloguj się';
   logoutButton.type = "button";
-  logoutButton.className = 'text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300 cursor-pointer';
+  logoutButton.className = 'sm:w-auto text-xs text-sm sm:text-s md:text-base lg:text-l bg-pink-300 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out hover:bg-blue-300 cursor-pointer';
 
   logoutButton.addEventListener('click', async () => {
     const { error } = await supabase.auth.signOut();
@@ -93,16 +93,16 @@ function setupAddArticleButton () {
 
   addArticleButton = document.createElement('button');
   addArticleButton.textContent = 'Dodaj artykuł';
-  addArticleButton.className = 'text-l hover:bg-pink-400 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out bg-blue-300 cursor-pointer';
+  addArticleButton.className = 'sm:w-auto text-xs text-sm sm:text-s md:text-base lg:text-l text-l hover:bg-pink-400 text-white font-semibold px-3 py-1 rounded-full transition duration-500 ease-in-out bg-blue-300 cursor-pointer';
   addArticleButton.type = "button";
 
   addArticleButton.addEventListener('click', () => {
     const dialog = document.createElement('dialog');
     dialog.className = 'bg-pink-100';
     dialog.innerHTML = `
-      <section class="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center text-pink-800 align-text-bottom rounded">
-        <form id="add-article-form" class="bg-pink-100 p-5 inline-grid gap-2 align-baseline">
-          <h2 class="text-2xl font-bold col-span-4">Dodaj nowy artykuł</h2>
+      <section class="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center text-pink-800 align-text-bottom">
+        <form id="add-article-form" class="bg-pink-100 rounded-xl p-5 inline-grid gap-2 align-baseline max-w-lg sm:p-6 sm:max-w-lg sm:mt-8 text-sm sm:text-s md:text-base lg:text-xl w-full">
+          <h2 class="text-l font-bold col-span-4 sm:text-xl md:text-2xl lg:text-3xl font-bold col-span-4">Dodaj nowy artykuł</h2>
           <label for="title" class="mt-2 col-span-4">Tytuł: </label>
             <input type="text" id="title" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
           <label for="subtitle" class="mt-2 col-span-4">Podtytuł: </label>
@@ -111,8 +111,8 @@ function setupAddArticleButton () {
             <input type="text" id="author" class="bg-white col-span-4 mt-2 rounded p-1 focus:outline-pink-800" required/>
           <label for="content" class="mt-2">Treść: </label>
             <textarea id="content" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required></textarea>
-          <button type="submit" id="submit" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4 hover:bg-blue-300 transition duration-500 ease-in-out">Dodaj na stronę</button>
-          <button type="button" id="close" aria-label="close" class="cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out" formnovalidate>Anuluj</button>
+          <button type="submit" id="submit" class="sm:w-auto cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded-full text-white font-semibold col-span-4 hover:bg-blue-300 transition duration-500 ease-in-out">Dodaj na stronę</button>
+          <button type="button" id="close" class="sm:w-auto cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded-full text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out" formnovalidate>Anuluj</button>
         </form>
       </section>
       `;
@@ -135,7 +135,8 @@ function setupAddArticleButton () {
           subtitle: form.subtitle.value,
           author: form.author.value,
           created_at: new Date().toISOString(),
-          content: form.content.value
+          content: form.content.value,
+          is_published: true
         };
 
       const { error } = await supabase.from('articles').insert(articleData);
@@ -163,7 +164,7 @@ function setupDeleteButton() {
     const deleteButton = document.createElement('button');
     deleteButton.textContent = "Usuń";
     deleteButton.type = "button";
-    deleteButton.className = "changer cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out mr-1";
+    deleteButton.className = "changer cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded-full text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out mr-1";
 
     deleteButton.addEventListener('click', async () => {
       const { error } = await supabase
@@ -193,7 +194,7 @@ function setupEditButton() {
     const editButton = document.createElement('button');
     editButton.textContent = "Edytuj";
     editButton.type = "button";
-    editButton.className = "changer cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out";
+    editButton.className = "changer cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded-full text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out";
 
     editButton.addEventListener('click', async () => {
       const { data: article, error } = await supabase
@@ -212,7 +213,7 @@ function setupEditButton() {
       dialog.className = "bg-pink-100";
       dialog.innerHTML = `
         <section class="fixed inset-0 z-10 overflow-y-auto flex justify-center items-center text-pink-800 align-text-bottom rounded">
-        <form id="edit-article-form" class="bg-pink-100 p-5 inline-grid gap-2 align-baseline">
+        <form id="edit-article-form" class="bg-pink-100 rounded-xl p-5 inline-grid gap-2 align-baseline max-w-lg sm:p-6 sm:max-w-lg sm:mt-8 text-sm sm:text-s md:text-base lg:text-xl w-full">
           <h2 class="text-2xl font-bold col-span-4">Edytuj artykuł</h2>
           <label for="title" class="mt-2 col-span-4">Tytuł: </label>
             <input type="text" id="title" value="${article.title}" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required/>
@@ -222,8 +223,8 @@ function setupEditButton() {
             <input type="text" id="author" value="${article.author}" class="bg-white col-span-4 mt-2 rounded p-1 focus:outline-pink-800" required/>
           <label for="content" class="mt-2">Treść: </label>
             <textarea id="content" class="bg-white col-span-4 rounded p-1 focus:outline-pink-800" required>${article.content}</textarea>
-          <button type="submit" id="save_changes" class="cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded text-white font-semibold col-span-4 hover:bg-blue-300 transition duration-500 ease-in-out">Zapisz zmiany</button>
-          <button type="button" id="cancel" aria-label="close" class="cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out" formnovalidate>Anuluj</button>
+          <button type="submit" id="save_changes" class="sm:w-auto cursor-pointer bg-pink-300 p-2 mt-2 w-auto justify-self-center rounded-full text-white font-semibold col-span-4 hover:bg-blue-300 transition duration-500 ease-in-out">Zapisz zmiany</button>
+          <button type="button" id="cancel" aria-label="close" class="sm:w-auto cursor-pointer hover:bg-pink-400 p-1 mt-1 w-auto justify-self-center rounded-full text-white font-semibold text-xs col-span-4 bg-blue-300 transition duration-500 ease-in-out" formnovalidate>Anuluj</button>
         </form>
       </section>
       `;

@@ -18,7 +18,3 @@ document.querySelector('form').addEventListener('submit', async (e) => {
 
     window.location.href = '/vite-multipage-starter/';
 });
-document.querySelector('.register-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    window.location.href = '/register.html';
-});
